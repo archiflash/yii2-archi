@@ -1,0 +1,21 @@
+{
+    "name": "archiflash/yii2-archi",
+    "description": "mail parser",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arkadii Khramov",
+            "email": "archi.khramov@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "archiflash\\archi\\": ""
+        }
+    }
+}
