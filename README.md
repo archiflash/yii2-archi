@@ -29,27 +29,31 @@ Once the extension is installed, simply use it in your code by  :
 
 ```php
 
-      $db_credentials = [];
-      $db_credentials["dsn"] = 'mysql:dbname=project;host=localhost';
-      $db_credentials["username"] = 'username';
-      $db_credentials["password"] = 'password';
-      
-      $mail_credentials = [];
-      $mail_credentials["imapPath"] = '{imap.yandex.ru:993/ssl/novalidate-cert/readonly}';
-      $mail_credentials["username"] = 'username';
-      $mail_credentials["password"] = 'password';
 
-      try {
+use archiflash\archi\MailParser;
 
-          $parser = new MailParser($db_credentials, $mail_credentials);
 
-          $result = $parser->parse();
+$db_credentials = [];
+$db_credentials["dsn"] = 'mysql:dbname=project;host=localhost';
+$db_credentials["username"] = 'username';
+$db_credentials["password"] = 'password';
 
-      } catch (\Exception $e) {
+$mail_credentials = [];
+$mail_credentials["imapPath"] = '{imap.yandex.ru:993/ssl/novalidate-cert/readonly}';
+$mail_credentials["username"] = 'username';
+$mail_credentials["password"] = 'password';
 
-          $result = $e; 
+try {
 
-      }
+    $parser = new MailParser($db_credentials, $mail_credentials);
+
+    $result = $parser->parse();
+
+} catch (\Exception $e) {
+
+    $result = $e; 
+
+}
      
 
 
