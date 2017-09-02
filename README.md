@@ -28,4 +28,29 @@ Usage
 Once the extension is installed, simply use it in your code by  :
 
 ```php
-<?= \archiflash\archi\AutoloadExample::widget(); ?>```"# yii2-archi" 
+
+      $db_credentials = [];
+      $db_credentials["dsn"] = 'mysql:dbname=project;host=localhost';
+      $db_credentials["username"] = 'username';
+      $db_credentials["password"] = 'password';
+      
+      $mail_credentials = [];
+      $mail_credentials["imapPath"] = '{imap.yandex.ru:993/ssl/novalidate-cert/readonly}';
+      $mail_credentials["username"] = 'username';
+      $mail_credentials["password"] = 'password';
+
+      try {
+
+          $parser = new MailParser($db_credentials, $mail_credentials);
+
+          $result = $parser->parse();
+
+      } catch (\Exception $e) {
+
+          $result = $e; 
+
+      }
+     
+
+
+```"# yii2-archi" 
