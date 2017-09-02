@@ -1,9 +1,9 @@
 <?php
 
-namespace app\models;
+
+namespace archiflash\archi;
 
 use Yii;
-use yii\base\Model;
 use yii\base\Exception;
 use yii\db\Connection;
 
@@ -11,21 +11,33 @@ use DOMDocument;
 /**
  * ContactForm is the model behind the contact form.
  */
-class MailParser extends Model
+class MailParser
 {
-    public $inbox;
-    public $debug_info = "";
+    private $inbox;
+    private $debug_info = "";
     private $sql_commands = [];
-    public $projects = [];
-    public $authors = [];
-    public $posts = [];
-    public $project_users = [];
+    private $projects = [];
+    private $authors = [];
+    private $posts = [];
+    private $project_users = [];
     private $connection;
-    public $result = false;
+    private $result = false;
     private $total_posts = 0;
+    private $mail_credentials = [];
+    private $db_credentials = [];
+    
 
+    public function __construct($db_credentials, $mail_credentials)
+    {
+
+          $this->mail_credentials = $mail_credentials;
+
+          $this->db_credentials = $db_credentials;
+
+    }
     public function parse()
     {
+
           $inbox = $this->connect();
                                  
           $str = "";
@@ -79,6 +91,7 @@ class MailParser extends Model
 
           $this->debug_info = ($this->total_posts)." posts for ".count($this->projects)." projects of ".count($this->authors)." authors";
 
+          return $this->debug_info;
     }
 
     public function insertPosts()
@@ -311,14 +324,23 @@ class MailParser extends Model
     {
 
         $connection = new \yii\db\Connection([
-        'dsn' => 'mysql:dbname=project;host=localhost',
-        'username' => 'root',
-        'password' => '123456',
+
+        'dsn' => $this->db_credentials["dsn"],
+        'username' => $this->db_credentials["username"],
+        'password' => $this->db_credentials["password"],
+
         ]);
 
-        $connection->open();
+        try {
 
-        $this->connection = $connection;
+            $connection->open();
+
+            $this->connection = $connection;
+
+        } catch (\Exception $e) {
+
+	    throw new Exception('Connection error: ' . $e);
+        }
 
     }
 
@@ -346,10 +368,11 @@ class MailParser extends Model
 
     public function connect()
     {
-        $imapPath = '{imap.yandex.ru:993/ssl/novalidate-cert/readonly}';
-        $username = 'mailparsing@siberian.pro';
-        $password = 'LftimVjkjlt;m';
  
+        $imapPath = $this->mail_credentials["imapPath"];
+        $username = $this->mail_credentials["username"];
+        $password = $this->mail_credentials["password"];
+
         $inbox = imap_open($imapPath,$username,$password);
 
         $check = imap_check($inbox);
