@@ -1,6 +1,15 @@
 <?php
-
-
+/* ==="PHP yii2 extension=== */
+/**===framework Yii2 
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
+ /*=== Test task for Siberian.pro
+ */
+/**
+ * @author Archi Khramov <archi.khramov@gmail.com>
+ */
 namespace archiflash\archi;
 
 use Yii;
@@ -8,9 +17,7 @@ use yii\base\Exception;
 use yii\db\Connection;
 
 use DOMDocument;
-/**
- * ContactForm is the model behind the contact form.
- */
+
 class MailParser
 {
     private $inbox;
@@ -27,7 +34,7 @@ class MailParser
     private $db_credentials = [];
     
 
-    public function __construct($db_credentials, $mail_credentials)
+    public function __construct ($db_credentials, $mail_credentials)
     {
 
           $this->mail_credentials = $mail_credentials;
@@ -35,7 +42,8 @@ class MailParser
           $this->db_credentials = $db_credentials;
 
     }
-    public function parse()
+
+    public function parse ()
     {
 
           $inbox = $this->connect();
@@ -52,8 +60,8 @@ class MailParser
 
           $message_count = imap_num_msg($inbox);
 
-                          //$message_count
-          for ($i=3; $i<=3; $i++) {
+                          
+          for ($i=1; $i<=$message_count; $i++) {
 
               $header = imap_header($inbox, $i); 
               
@@ -65,7 +73,7 @@ class MailParser
               
               $message["digests"] = [];
 
-              for ($j=1;$j<3;$j++) {//count($parts)
+              for ($j=1;$j<count($parts);$j++) {
 
                  $body  = imap_fetchbody($inbox, $i,$j+1);
 
@@ -89,17 +97,17 @@ class MailParser
 
           $this->result = true;
 
-          $this->debug_info = ($this->total_posts)." posts for ".count($this->projects)." projects of ".count($this->authors)." authors";
+          $this->debug_info = ($this->total_posts)." posts by ".count($this->authors)." authors for ".count($this->projects)." projects.";
 
           return $this->debug_info;
     }
 
-    public function insertPosts()
+    public function insertPosts ()
     {  
 
-        foreach ($this->posts as $project_id=>$posts){
+        foreach ($this->posts as $project_id=>$posts) {
             
-            foreach ($posts as $author_id=>$author_posts){
+            foreach ($posts as $author_id=>$author_posts) {
 
                 foreach ($author_posts as $post) {
 
@@ -125,10 +133,10 @@ class MailParser
 
     }
     
-    public function bindPostToUsers($project_id,$post_id)
+    public function bindPostToUsers ($project_id,$post_id)
     {          
 
-       foreach($this->project_users[$project_id] as $user_id){
+       foreach ($this->project_users[$project_id] as $user_id) {
 
           $this->sql_commands["insert_post_to_user"]->bindValue(':post_id', $post_id);
 
@@ -140,7 +148,7 @@ class MailParser
 
     }
 
-    public function insertDigests($val)
+    public function insertDigests ($val)
     {
 
         foreach ($val["digests"] as $projects) {
@@ -165,7 +173,7 @@ class MailParser
 
     }
 
-    public function parseEML($val)
+    public function parseEML ($val)
     {
 
         $digest = [];
@@ -200,7 +208,7 @@ class MailParser
 
     }
 
-    public function getContext($val)
+    public function getContext ($val)
     {
         $result = [];
         
@@ -220,7 +228,7 @@ class MailParser
 
     }
 
-    public function getProjectId($name,$date)
+    public function getProjectId ($name,$date)
     {
 
         if ($this->projects[$name]) {
@@ -243,7 +251,7 @@ class MailParser
 
              $this->projects[$name] = $id;
 
-        }else{
+        } else {
         
             $id = $this->projects[$name] = $result["id"];
         }
@@ -254,7 +262,7 @@ class MailParser
 
     }
 
-    public function getProjectUsers($id)
+    public function getProjectUsers ($id)
     {
 
         if ($this->project_users[$id]) {
@@ -279,7 +287,7 @@ class MailParser
 
     }
 
-    public function getAuthorId($author,$date)
+    public function getAuthorId ($author,$date)
     {
 
         if ($this->authors[$author]) {
@@ -320,7 +328,7 @@ class MailParser
 
     }
 
-    public function connectDB()
+    public function connectDB ()
     {
 
         $connection = new \yii\db\Connection([
@@ -344,7 +352,7 @@ class MailParser
 
     }
 
-    public function prepareSQL()
+    public function prepareSQL ()
     {
 
         $connection = $this->connection;
@@ -359,14 +367,14 @@ class MailParser
 
     }
 
-    public function closeDB()
+    public function closeDB ()
     {
 
          $this->connection->close();
 
     }
 
-    public function connect()
+    public function connect ()
     {
  
         $imapPath = $this->mail_credentials["imapPath"];
@@ -386,7 +394,7 @@ class MailParser
         return $inbox;
     }
 
-    public function disconnect() 
+    public function disconnect () 
     {
         if($this->inbox) {
 

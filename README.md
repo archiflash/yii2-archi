@@ -1,3 +1,6 @@
+"# yii2-archi" 
+
+
 тестовое расширение
 ===================
 mail parser
@@ -43,18 +46,12 @@ $mail_credentials["imapPath"] = '{imap.yandex.ru:993/ssl/novalidate-cert/readonl
 $mail_credentials["username"] = 'username';
 $mail_credentials["password"] = 'password';
 
-try {
 
-    $parser = new MailParser($db_credentials, $mail_credentials);
+$parser = new MailParser($db_credentials, $mail_credentials);
 
-    $result = $parser->parse();
+$result = $parser->parse(); // returns string
 
-} catch (\Exception $e) {
-
-    $result = $e; 
-
-}
      
 
 
-```"# yii2-archi" 
+```
